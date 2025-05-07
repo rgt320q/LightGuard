@@ -1,0 +1,14 @@
+altgraph==0.17.4
+keyboard==0.13.5
+monitorcontrol==3.1.0
+packaging==25.0
+pefile==2023.2.7
+pillow==11.2.1
+pyinstaller==6.13.0
+pyinstaller-hooks-contrib==2025.3
+pystray==0.19.5
+pywin32-ctypes==0.2.3
+scapy==2.6.1
+schedule==1.2.2
+setuptools==80.3.0
+six==1.17.0
