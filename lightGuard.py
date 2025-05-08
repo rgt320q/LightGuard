@@ -5,6 +5,8 @@ import tkinter as tk
 import re
 import schedule
 import subprocess
+import sys
+import winreg
 import time
 import keyboard
 import threading
@@ -63,6 +65,23 @@ def load_settings():
 
     save_settings(settings)
     return settings
+
+
+def add_to_startup():
+    """Uygulamayı Windows başlangıcına ekler"""
+    key = winreg.HKEY_CURRENT_USER
+    path = r"Software\Microsoft\Windows\CurrentVersion\Run"
+    app_name = "LightGuard"
+    exe_path = sys.executable  # Python scriptini doğrudan çalıştırmak için
+
+    try:
+        registry_key = winreg.OpenKey(key, path, 0, winreg.KEY_SET_VALUE)
+        winreg.SetValueEx(registry_key, app_name, 0, winreg.REG_SZ, exe_path)
+        winreg.CloseKey(registry_key)
+        print("✅ LightGuard başarıyla başlangıca eklendi!")
+    except Exception as e:
+        print(f"❌ Başlangıca eklenirken hata oluştu: {e}")
+
 
 # Save settings to JSON file
 def save_settings(settings):
@@ -466,6 +485,9 @@ if __name__ == "__main__":
         wake_up_thread = threading.Thread(target=detect_wake_up)
         wake_up_thread.daemon = True
         wake_up_thread.start()
+        add_to_startup()
+        wait_for_monitor_ready()  # Wait for the monitor to be ready before applying brightness
+        schedule_thread = threading.Thread(target=schedule_runner)
     except Exception as e:
         print(f"❌ Thread hatası: {e}")
     
