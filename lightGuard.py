@@ -5,8 +5,6 @@ import tkinter as tk
 import re
 import schedule
 import subprocess
-import sys
-import winreg
 import time
 import keyboard
 import threading
@@ -51,7 +49,7 @@ def load_settings():
                     if key in user_settings and isinstance(user_settings[key], type(default_value)):
                         settings[key] = user_settings[key]
 
-        except (json.JSONDecodeError, IOError) as e:
+        except (json.JSONDecodeError, IOError):
             # Hidden root is required to start a tkinter window on non-starter systems
             hidden_root = tk.Tk()
             hidden_root.withdraw()
@@ -66,22 +64,22 @@ def load_settings():
     save_settings(settings)
     return settings
 
+# Function to add the application to Windows startup
+# def add_to_startup():
+#     """Uygulamayı Windows başlangıcına ekler"""
+#     key = winreg.HKEY_CURRENT_USER
+#     path = r"Software\Microsoft\Windows\CurrentVersion\Run"
+#     app_name = "LightGuard"
+#     exe_path = sys.executable  # Python scriptini doğrudan çalıştırmak için
 
-def add_to_startup():
-    """Uygulamayı Windows başlangıcına ekler"""
-    key = winreg.HKEY_CURRENT_USER
-    path = r"Software\Microsoft\Windows\CurrentVersion\Run"
-    app_name = "LightGuard"
-    exe_path = sys.executable  # Python scriptini doğrudan çalıştırmak için
-
-    try:
-        registry_key = winreg.OpenKey(key, path, 0, winreg.KEY_SET_VALUE)
-        winreg.SetValueEx(registry_key, app_name, 0, winreg.REG_SZ, exe_path)
-        winreg.CloseKey(registry_key)
-        print("✅ LightGuard başarıyla başlangıca eklendi!")
-    except Exception as e:
-        print(f"❌ Başlangıca eklenirken hata oluştu: {e}")
-
+#     try:
+#         registry_key = winreg.OpenKey(key, path, 0, winreg.KEY_SET_VALUE)
+#         winreg.SetValueEx(registry_key, app_name, 0, winreg.REG_SZ, exe_path)
+#         winreg.CloseKey(registry_key)
+#         #print("✅ LightGuard başarıyla başlangıca eklendi!")
+#     except Exception:
+#         messagebox.showerror(title="Startup Error", message="An error occurred while adding the application to startup. Please try again or check your permissions.")
+#         #print(f"❌ An error occurred while adding to startup: {e}")
 
 # Save settings to JSON file
 def save_settings(settings):
@@ -104,7 +102,8 @@ def set_brightness_contrast(brightness, contrast):
             monitor.set_luminance(brightness)
             monitor.set_contrast(contrast)
     else:
-        print("ERROR: No monitor found.")
+        messagebox.showerror(title="Monitor searching", message="No monitor found. Please check your connection.")
+        #print("ERROR: No monitor found.")
 
 # Function to check if the current time is within a specified range
 def is_time_in_range(start, end, now):
@@ -146,8 +145,9 @@ def update_scheduled_tasks():
         schedule.every().day.at(settings["day_end"]).do(
             lambda: set_brightness_contrast(settings["night_brightness"], settings["night_contrast"])
         )
-    except ValueError as e:
-        print("Scheduling format error:", e)
+    except ValueError:
+        messagebox.showerror(title="Scheduling information", message="Please check the time format in the settings. Example: 07:00")
+        #print("Scheduling format error:", e)
 
 update_scheduled_tasks() # Update scheduled tasks for the first start
 
@@ -236,7 +236,7 @@ def is_valid_time_format(t):
 # Function to open the settings window
 def open_settings_window():
     """Open the settings window."""
-    def save_position(event=None):
+    def save_position(event=None):  # Event parameter is unused
         """Save the current position of the settings window."""
         settings["window_x"] = root_settings.winfo_x()
         settings["window_y"] = root_settings.winfo_y()
@@ -357,7 +357,7 @@ def open_settings_window():
     button_frame = tk.Frame(root_settings)
     button_frame.pack(pady=10)
 
-    def enable_save_button(*args):
+    def enable_save_button(*args):  # Args parameter is unused
         """Enable the save button when any entry is modified."""        
         btn_save.config(state="normal") # Enable the save button
 
@@ -390,53 +390,52 @@ menu = Menu(
 
 icon = Icon("brightness_control", create_image(), menu=menu)
 
-# def wait_for_monitor_ready():
-#     """Monitörün DDC/CI üzerinden veri sağlamasını bekler."""
-#     retries = 10  # Maksimum deneme sayısı
-#     for i in range(retries):
-#         try:
-#             with get_monitors()[0] as monitor:
-#                 if monitor.get_vcp_capabilities():
-#                     print(f"✅ Monitör hazır, parlaklık uygulanıyor... Zaman: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-#                     return True
-#         except:
-#             print(f"⏳ Monitör hazır değil, tekrar deneme {i + 1}/{retries} Zaman: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-#             time.sleep(2)  # 2 saniye bekle ve tekrar dene
+def wait_for_monitor_ready():
+    """Monitörün DDC/CI üzerinden veri sağlamasını bekler."""
+    retries = 10  # Maksimum deneme sayısı
+    for i in range(retries):
+        try:
+            with get_monitors()[0] as monitor:
+                if monitor.get_vcp_capabilities():
+                    print(f"✅ Monitör hazır, parlaklık uygulanıyor... Zaman: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+                    return True
+        except:
+            print(f"⏳ Monitör hazır değil, tekrar deneme {i + 1}/{retries} Zaman: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+            time.sleep(2)  # 2 saniye bekle ve tekrar dene
 
 def wait_for_monitor_ready():
-    """Monitörün DDC/CI üzerinden veri sağlamasını bekler ve zaman ölçümü yapar."""
-    retries = 10  # Maksimum deneme sayısı
-    delay = 2  # Her deneme arasında bekleme süresi
-    start_time = time.time()  # Başlangıç zamanını kaydet
+    """Waits for the monitor to provide data via DDC/CI and measures the time taken."""
+    retries = 10  # Maximum number of attempts
+    delay = 2  # Delay between each attempt
+    start_time = time.time()  # Record the start time
 
     for i in range(retries):
-        iteration_start = time.time()  # Her döngü başlangıcını kaydet
+        iteration_start = time.time()  # Record the start time of each iteration
         try:
             monitors = get_monitors()
             if monitors:
                 with monitors[0] as monitor:
                     capabilities = monitor.get_vcp_capabilities()
                     if capabilities:
-                        total_time = time.time() - start_time  # Toplam geçen süre
-                        print(f"✅ Monitör hazır! Toplam geçen süre: {total_time:.2f} saniye")
+                        _ = time.time() - start_time  # Total elapsed time (unused)
+                        #messagebox.showinfo("Monitor Ready", f"✅ Monitor is ready! Total elapsed time: {total_time:.2f} seconds")
                         return True
 
-            elapsed_time = time.time() - iteration_start  # Döngü içinde geçen süre
-            print(f"⏳ Monitör hazır değil, tekrar deneme {i + 1}/{retries} | Geçen süre: {elapsed_time:.2f} saniye")
+            elapsed_time = time.time() - iteration_start  # Time elapsed in the loop
+            messagebox.showinfo("Monitor Status", f"⏳ Monitor not ready, retrying {i + 1}/{retries} | Elapsed time: {elapsed_time:.2f} seconds")
 
         except Exception as e:
-            print(f"⚠️ Beklenmeyen hata oluştu: {e}")
+            messagebox.showerror("Monitor Error", f"⚠️ Unexpected error occurred: {e}")
 
-        time.sleep(delay)  # Belirtilen süre kadar bekle ve tekrar dene
+        time.sleep(delay)  # Wait for the specified time and retry
 
-    print("❌ Monitör hazır hale gelmedi. Alternatif bir hata yönetimi gerekiyor.")
+    messagebox.showerror("Monitor Error", "❌ Monitor did not become ready. Please check your monitor connection or settings.")
     return False
 
-
 def handle_screen_wake_event():
-    """Ekran uyandıktan sonra parlaklık ve kontrastı tekrar uygular."""
-    print(f"🔹 Ekran uyandı, parlaklık ve kontrast tekrar uygulanıyor...")
-    wait_for_monitor_ready()  # Monitörün hazır olmasını bekle
+    """Reapply brightness and contrast after the screen wakes up."""
+    #messagebox.showinfo("Screen Wake Event", "🔹 Screen woke up, reapplying brightness and contrast...")
+    wait_for_monitor_ready()  # Wait for the monitor to be ready
     apply_current_brightness_contrast()
 
 def start_system_tray():
@@ -444,8 +443,7 @@ def start_system_tray():
         time.sleep(2)  # Sistem tepsisinin başlatılmasını bekle
         icon.run()
     except KeyError as e:
-        print(f"❌ PyStray sistem hatası: {e}")
-
+        messagebox.showerror("System Tray Error", f"❌ PyStray system error: {e}")
 
 class SYSTEM_POWER_STATUS(ctypes.Structure):
     _fields_ = [
@@ -457,39 +455,39 @@ class SYSTEM_POWER_STATUS(ctypes.Structure):
         ("BatteryFullLifeTime", ctypes.c_ulong),
     ]
 
-def detect_wake_up():
-    """Windows Event Log üzerinden uyandırma olaylarını takip eder."""
-    print("Uyandırma olayları dinleniyor...")
+# def detect_wake_up():
+#     """Monitors wake-up events through the Windows Event Log."""
+#     #messagebox.showinfo("Wake-Up Listener", "Listening for wake-up events...")
 
-    while True:
-        try:
-            log_output = subprocess.check_output(["wevtutil", "qe", "System", "/c:1", "/rd:true", "/f:text"], stderr=subprocess.STDOUT, text=True)
-            if "Event ID: 1" in log_output:  # Ekran uyandırma olayı
-                print(f"🔹 Event ID: 1 Ekran uyandırma olayı tespit edildi, parlaklık uygulanıyor! Zaman: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-                handle_screen_wake_event()
-            elif "Event ID: 42" in log_output:  # Uyandırma olayları
-                print(f"🔹Event ID: 42 Uyandırma olayı tespit edildi, parlaklık uygulanıyor! Zaman: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-                handle_screen_wake_event()
-            if "Power-Troubleshooter" in log_output:  # Uyandırma olayları bu kayıttan geçer
-                print(f"🔹Power-Troubleshooter Uyandırma olayı tespit edildi, parlaklık uygulanıyor! Zaman: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-                handle_screen_wake_event()
+#     while True:
+#         try:
+#             log_output = subprocess.check_output(["wevtutil", "qe", "System", "/c:1", "/rd:true", "/f:text"], stderr=subprocess.STDOUT, text=True)
+#             if "Event ID: 1" in log_output:  # Screen wake-up event
+#                 #messagebox.showinfo("Wake-Up Event", f"🔹 Event ID: 1 Screen wake-up event detected, applying brightness! Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+#                 handle_screen_wake_event()
+#             elif "Event ID: 42" in log_output:  # Wake-up events
+#                 #messagebox.showinfo("Wake-Up Event", f"🔹 Event ID: 42 Wake-up event detected, applying brightness! Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+#                 handle_screen_wake_event()
+#             if "Power-Troubleshooter" in log_output:  # Wake-up events pass through this log
+#                 #messagebox.showinfo("Wake-Up Event", f"🔹 Power-Troubleshooter Wake-up event detected, applying brightness! Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+#                 handle_screen_wake_event()
 
-        except subprocess.CalledProcessError:
-            print("XXX Windows Event Log okunurken hata oluştu.")
+#         except subprocess.CalledProcessError:
+#             messagebox.showerror("Log Error", "XXX Error occurred while reading the Windows Event Log.")
 
-        time.sleep(5)  # 5 saniyede bir kontrol et (ama sadece yeni olayları takip et!)
+#         time.sleep(5)  # Check every 5 seconds (but only follow new events!)
 
 # Main loop
 if __name__ == "__main__":    
     try:
-        wake_up_thread = threading.Thread(target=detect_wake_up)
-        wake_up_thread.daemon = True
-        wake_up_thread.start()
-        add_to_startup()
+        # wake_up_thread = threading.Thread(target=detect_wake_up)
+        # wake_up_thread.daemon = True
+        # wake_up_thread.start()
+        #add_to_startup()
         wait_for_monitor_ready()  # Wait for the monitor to be ready before applying brightness
         schedule_thread = threading.Thread(target=schedule_runner)
     except Exception as e:
-        print(f"❌ Thread hatası: {e}")
+        messagebox.showerror("Thread Error", f"❌ Thread error: {e}")
     
     apply_current_brightness_contrast()  # Apply immediately on startup
     icon.run() # Run the system tray icon

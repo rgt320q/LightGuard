@@ -1,0 +1,27 @@
+LightGuard Pre-Installation Information
+Thank you for choosing LightGuard! This application allows you to easily manage your screen brightness and contrast. 
+Before proceeding with the installation, please review 
+
+the following details:
+
+📌 System Requirements
+- Operating System: Windows 10 or later
+- Storage: At least 50MB of free space
+- Permissions: The application runs in the system tray and may require administrator permissions to adjust display settings.
+
+⚙️ Installation Steps
+- Run the installer (LightGuard_Setup.exe).
+- Accept the license agreement (you can review details in the LICENSE.txt file).
+- Choose the installation location or proceed with the default directory.
+- Complete the installation and launch the application.
+
+🔎 Key Features
+- Option to start automatically with Windows.
+- Save custom settings and use keyboard shortcuts.
+- Schedule brightness and contrast adjustments based on time.
+
+🚀 Support & Feedback
+If you encounter any issues or have suggestions for improvements, feel free to reach out via our support channels.
+
+cetin.omer@outlook.com.tr
+https://github.com/rgt320q
