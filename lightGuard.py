@@ -137,7 +137,7 @@ def apply_current_brightness_contrast():
             set_brightness_contrast(settings["night_brightness"], settings["night_contrast"])
             globals().__setitem__('currentMode', "night")
     except Exception as e:
-        print("Time check error:", e)
+        messagebox.showerror("Time Check Error", f"An error occurred while checking the time: {e}")
 
 # Function to run scheduled tasks
 def schedule_runner():
@@ -145,7 +145,7 @@ def schedule_runner():
     #print("Scheduled tasks started...")
 
     while True:
-        print(f"\r CurrentMode={currentMode} Scheduled tasks running... {schedule.idle_seconds()} seconds until next task", end="")
+        #print(f"\r CurrentMode={currentMode} Scheduled tasks running... {schedule.idle_seconds()} seconds until next task", end="")
         schedule.run_pending()  # Run scheduled tasks        
         time.sleep(1) # Check every minute
 
@@ -407,10 +407,10 @@ def wait_for_monitor_ready():
         try:
             with get_monitors()[0] as monitor:
                 if monitor.get_vcp_capabilities():
-                    print(f"✅ Monitor is ready, brightness is being applied... Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+                    messagebox.showinfo("Monitor Ready", f"✅ Monitor is ready, brightness is being applied... Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
                     return True
         except:
-            print(f"⏳ Monitor not ready, retrying {i + 1}/{retries} Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+            messagebox.showinfo("Monitor Status", f"⏳ Monitor not ready, retrying {i + 1}/{retries} Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
             time.sleep(2)  # Wait for 2 seconds and retry
 
 def wait_for_monitor_ready():
