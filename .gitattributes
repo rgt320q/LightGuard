@@ -1,4 +1,4 @@
-*.html,*.txt linguist-detectable=false
+*.html linguist-detectable=false
 *.txt linguist-detectable=false
 *.ico linguist-detectable=false
 *.png linguist-detectable=false
