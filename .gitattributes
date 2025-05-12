@@ -4,3 +4,5 @@
 *.ico linguist-detectable=false
 *.png linguist-detectable=false
 *.spec linguist-detectable=false
+*.md linguist-documentation
+*.rst linguist-documentation
