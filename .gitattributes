@@ -1,2 +1,4 @@
+*.py linguist-detectable=true
+*.html linguist-generated=true
 *.md linguist-documentation
 *.rst linguist-documentation
