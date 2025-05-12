@@ -1,8 +1,5 @@
 *.py linguist-detectable=true
-*.html linguist-detectable=false
-*.txt linguist-detectable=false
-*.ico linguist-detectable=false
-*.png linguist-detectable=false
-*.spec linguist-detectable=false
-*.md linguist-documentation
-*.rst linguist-documentation
+*.tex linguist-vendored
+*.toc linguist-vendored
+*.aux linguist-vendored
+
