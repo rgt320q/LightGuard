@@ -1,3 +1,4 @@
+*.py linguist-detectable=true
 *.html linguist-detectable=false
 *.txt linguist-detectable=false
 *.ico linguist-detectable=false
