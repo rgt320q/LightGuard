@@ -1,7 +1,1 @@
-*.py linguist-detectable=true
 *.html linguist-detectable=false
-*.md linguist-documentation
-*.rst linguist-documentation
-*.txt linguist-documentation
-*.ico linguist-documentation
-*.png linguist-documentation
