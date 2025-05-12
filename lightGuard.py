@@ -81,6 +81,15 @@ def load_settings():
 #         messagebox.showerror(title="Startup Error", message="An error occurred while adding the application to startup. Please try again or check your permissions.")
 #         #print(f"❌ An error occurred while adding to startup: {e}")
 
+# Initialize currentMode with a default value
+currentMode = "None"
+
+
+def set_mode(mode):
+    global currentMode
+    currentMode = mode
+    icon.update_menu()
+
 # Save settings to JSON file
 def save_settings(settings):
     with open(SETTINGS_FILE, "w") as file:
@@ -93,6 +102,7 @@ def close_settings_window(root_settings):
 
 # **Important:** Load settings at the beginning of the code
 settings = load_settings()
+
 
 # Function to change monitor brightness and contrast
 def set_brightness_contrast(brightness, contrast):
@@ -122,50 +132,50 @@ def apply_current_brightness_contrast():
 
         if is_time_in_range(day_start, day_end, now):
             set_brightness_contrast(settings["day_brightness"], settings["day_contrast"])
+            globals().__setitem__('currentMode', "day")
         else:
             set_brightness_contrast(settings["night_brightness"], settings["night_contrast"])
+            globals().__setitem__('currentMode', "night")
     except Exception as e:
         print("Time check error:", e)
 
 # Function to run scheduled tasks
 def schedule_runner():
     schedule.every().minute.do(apply_current_brightness_contrast)  # Apply every minute to check time
-    
+    #print("Scheduled tasks started...")
+
     while True:
+        print(f"\r CurrentMode={currentMode} Scheduled tasks running... {schedule.idle_seconds()} seconds until next task", end="")
         schedule.run_pending()  # Run scheduled tasks        
         time.sleep(1) # Check every minute
 
 # Create scheduled tasks
 def update_scheduled_tasks():
     schedule.clear()
+    #print("Scheduled tasks cleared...")
     try:
-        schedule.every().day.at(settings["day_start"]).do(
-            lambda: set_brightness_contrast(settings["day_brightness"], settings["day_contrast"])
-        )
-        schedule.every().day.at(settings["day_end"]).do(
-            lambda: set_brightness_contrast(settings["night_brightness"], settings["night_contrast"])
-        )
+        #print("Scheduling tasks...")
+        schedule.every().day.at(settings["day_start"]).do(lambda: (set_brightness_contrast(settings["day_brightness"], settings["day_contrast"]), set_mode("day")))
+        schedule.every().day.at(settings["day_end"]).do(lambda: (set_brightness_contrast(settings["night_brightness"], settings["night_contrast"]), set_mode("night")))
+        #print("Night mode scheduled...")
     except ValueError:
         messagebox.showerror(title="Scheduling information", message="Please check the time format in the settings. Example: 07:00")
         #print("Scheduling format error:", e)
 
-update_scheduled_tasks() # Update scheduled tasks for the first start
-
-active_shortcuts = []   # List to keep track of active shortcuts
-
+active_shortcuts = [] # List to store active keyboard shortcuts
 # Function to clear keyboard shortcuts
 def clear_keyboard_shortcuts():
     for shortcut in active_shortcuts:
         keyboard.remove_hotkey(shortcut) # Remove the shortcut
         active_shortcuts.clear()
 
-# Change mode with keyboard shortcuts
+#Change mode with keyboard shortcuts
 def setup_keyboard_shortcuts():
-    clear_keyboard_shortcuts() # Clear existing shortcuts
+    clear_keyboard_shortcuts()  # Clear existing shortcuts
     """Set up keyboard shortcuts for day and night modes."""
-    active_shortcuts.append(keyboard.add_hotkey(settings["day_shortcut"], lambda: set_brightness_contrast(settings["day_brightness"], settings["day_contrast"])))
-    active_shortcuts.append(keyboard.add_hotkey(settings["night_shortcut"], lambda: set_brightness_contrast(settings["night_brightness"], settings["night_contrast"])))
-    
+    active_shortcuts.append(keyboard.add_hotkey(settings["day_shortcut"], lambda: (set_brightness_contrast(settings["day_brightness"], settings["day_contrast"]), set_mode("day"))))
+    active_shortcuts.append(keyboard.add_hotkey(settings["night_shortcut"], lambda: (set_brightness_contrast(settings["night_brightness"], settings["night_contrast"]), set_mode("night"))
+))
 setup_keyboard_shortcuts() # Set shortcuts for the first start
 
 # System tray icon and menu
@@ -382,8 +392,8 @@ def open_settings_window():
 
 # System tray menu
 menu = Menu(
-    MenuItem("Day Mode", lambda: set_brightness_contrast(settings["day_brightness"], settings["day_contrast"])),
-    MenuItem("Night Mode", lambda: set_brightness_contrast(settings["night_brightness"], settings["night_contrast"])),
+    MenuItem("Day Mode", lambda: (set_brightness_contrast(settings["day_brightness"], settings["day_contrast"]), set_mode("day")), checked=lambda item: currentMode == "day"),
+    MenuItem("Night Mode", lambda: (set_brightness_contrast(settings["night_brightness"], settings["night_contrast"]), set_mode("night")), checked=lambda item: currentMode == "night"),
     MenuItem("Settings", open_settings_window),
     MenuItem("Exit", lambda icon: icon.stop() or os._exit(0))
 )
@@ -391,17 +401,17 @@ menu = Menu(
 icon = Icon("brightness_control", create_image(), menu=menu)
 
 def wait_for_monitor_ready():
-    """Monitörün DDC/CI üzerinden veri sağlamasını bekler."""
-    retries = 10  # Maksimum deneme sayısı
+    """Waits for the monitor to provide data via DDC/CI."""
+    retries = 10  # Maximum number of attempts
     for i in range(retries):
         try:
             with get_monitors()[0] as monitor:
                 if monitor.get_vcp_capabilities():
-                    print(f"✅ Monitör hazır, parlaklık uygulanıyor... Zaman: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+                    print(f"✅ Monitor is ready, brightness is being applied... Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
                     return True
         except:
-            print(f"⏳ Monitör hazır değil, tekrar deneme {i + 1}/{retries} Zaman: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-            time.sleep(2)  # 2 saniye bekle ve tekrar dene
+            print(f"⏳ Monitor not ready, retrying {i + 1}/{retries} Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+            time.sleep(2)  # Wait for 2 seconds and retry
 
 def wait_for_monitor_ready():
     """Waits for the monitor to provide data via DDC/CI and measures the time taken."""
@@ -486,8 +496,11 @@ if __name__ == "__main__":
         #add_to_startup()
         wait_for_monitor_ready()  # Wait for the monitor to be ready before applying brightness
         schedule_thread = threading.Thread(target=schedule_runner)
+        schedule_thread.daemon = True
+        schedule_thread.start()  # Start the scheduling thread
     except Exception as e:
-        messagebox.showerror("Thread Error", f"❌ Thread error: {e}")
+        messagebox.showerror("Thread Error", f"❌ Thread error: {e}")    
     
+    update_scheduled_tasks() # Update scheduled tasks for the first start     
     apply_current_brightness_contrast()  # Apply immediately on startup
     icon.run() # Run the system tray icon
