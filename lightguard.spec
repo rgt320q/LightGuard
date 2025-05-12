@@ -2,7 +2,7 @@
 
 
 a = Analysis(
-    ['lightguard.py'],
+    ['main.py'],
     pathex=[],
     binaries=[],
     datas=[],
