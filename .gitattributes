@@ -2,3 +2,4 @@
 *.html linguist-generated=true
 *.md linguist-documentation
 *.rst linguist-documentation
+*.txt linguist-documentation
