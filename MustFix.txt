@@ -1,0 +1,2 @@
+- When install the program, if the monitör is not support the program must warning and close. Its try repeatedly and getting warning
+- Task scheduler must setup during installation.

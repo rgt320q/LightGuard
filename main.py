@@ -64,23 +64,6 @@ def load_settings():
     save_settings(settings)
     return settings
 
-# Function to add the application to Windows startup
-# def add_to_startup():
-#     """Uygulamayı Windows başlangıcına ekler"""
-#     key = winreg.HKEY_CURRENT_USER
-#     path = r"Software\Microsoft\Windows\CurrentVersion\Run"
-#     app_name = "LightGuard"
-#     exe_path = sys.executable  # Python scriptini doğrudan çalıştırmak için
-
-#     try:
-#         registry_key = winreg.OpenKey(key, path, 0, winreg.KEY_SET_VALUE)
-#         winreg.SetValueEx(registry_key, app_name, 0, winreg.REG_SZ, exe_path)
-#         winreg.CloseKey(registry_key)
-#         #print("✅ LightGuard başarıyla başlangıca eklendi!")
-#     except Exception:
-#         messagebox.showerror(title="Startup Error", message="An error occurred while adding the application to startup. Please try again or check your permissions.")
-#         #print(f"❌ An error occurred while adding to startup: {e}")
-
 # Initialize currentMode with a default value
 currentMode = "None"
 
@@ -102,7 +85,6 @@ def close_settings_window(root_settings):
 
 # **Important:** Load settings at the beginning of the code
 settings = load_settings()
-
 
 # Function to change monitor brightness and contrast
 def set_brightness_contrast(brightness, contrast):
@@ -465,35 +447,17 @@ class SYSTEM_POWER_STATUS(ctypes.Structure):
         ("BatteryFullLifeTime", ctypes.c_ulong),
     ]
 
-# def detect_wake_up():
-#     """Monitors wake-up events through the Windows Event Log."""
-#     #messagebox.showinfo("Wake-Up Listener", "Listening for wake-up events...")
+def check_wakeup_event():
+    """Windows Event Log üzerinden sistem uyandırma olayını kontrol eder."""
+    command = 'wevtutil qe System /q:"*[System[(EventID=1)]]" /c:1 /f:text'
+    result = subprocess.run(command, shell=True, capture_output=True, text=True)
 
-#     while True:
-#         try:
-#             log_output = subprocess.check_output(["wevtutil", "qe", "System", "/c:1", "/rd:true", "/f:text"], stderr=subprocess.STDOUT, text=True)
-#             if "Event ID: 1" in log_output:  # Screen wake-up event
-#                 #messagebox.showinfo("Wake-Up Event", f"🔹 Event ID: 1 Screen wake-up event detected, applying brightness! Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-#                 handle_screen_wake_event()
-#             elif "Event ID: 42" in log_output:  # Wake-up events
-#                 #messagebox.showinfo("Wake-Up Event", f"🔹 Event ID: 42 Wake-up event detected, applying brightness! Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-#                 handle_screen_wake_event()
-#             if "Power-Troubleshooter" in log_output:  # Wake-up events pass through this log
-#                 #messagebox.showinfo("Wake-Up Event", f"🔹 Power-Troubleshooter Wake-up event detected, applying brightness! Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-#                 handle_screen_wake_event()
+    if "Power-Troubleshooter" in result.stdout:
+        print("🚀 Sistem uyandırıldı! Parlaklık ayarlanıyor...")
+        apply_current_brightness_contrast() # Apply brightness and contrast settings
 
-#         except subprocess.CalledProcessError:
-#             messagebox.showerror("Log Error", "XXX Error occurred while reading the Windows Event Log.")
-
-#         time.sleep(5)  # Check every 5 seconds (but only follow new events!)
-
-# Main loop
 if __name__ == "__main__":    
-    try:
-        # wake_up_thread = threading.Thread(target=detect_wake_up)
-        # wake_up_thread.daemon = True
-        # wake_up_thread.start()
-        #add_to_startup()
+    try:        
         wait_for_monitor_ready()  # Wait for the monitor to be ready before applying brightness
         schedule_thread = threading.Thread(target=schedule_runner)
         schedule_thread.daemon = True
