@@ -1,0 +1,24 @@
+🎉 LightGuard Installed Successfully!
+
+Thank you for installing LightGuard! Your screen brightness and contrast are now easily manageable.
+
+🚀 Getting Started
+- Check the System Tray: LightGuard runs in the background! Find its icon in the bottom-right system tray.
+- Customize Your Settings: Adjust automatic scheduling, custom brightness levels, and keyboard shortcuts in the settings menu.
+- Enable Auto-Start: Configure LightGuard to launch automatically when your computer starts.
+
+🔎 Key Features
+✅ Dynamic brightness and contrast control
+✅ Automatic adjustments based on schedules
+✅ Quick controls with user-defined shortcuts
+✅ Lightweight—runs in the background without affecting system performance
+
+📌 Need Help?
+If you have any questions or feedback, feel free to reach out via our support channels.
+Enjoy a more comfortable screen experience with LightGuard! 🎉
+
+This text can be included in the first launch screen or as a message after installation completes. 
+Let me know if you'd like any modifications! 🚀
+
+cetin.omer@outlook.com.tr
+https://github.com/rgt320q
