@@ -1,0 +1,17 @@
+from cx_Freeze import setup, Executable
+
+# Dependencies are automatically detected, but it might need
+# fine tuning.
+build_options = {'packages': [], 'excludes': []}
+
+base = 'gui'
+
+executables = [
+    Executable('main.py', base=base, target_name = 'main.py')
+]
+
+setup(name='LightGuard',
+      version = '1.5.1',
+      description = 'Monitor light otomation application',
+      options = {'build_exe': build_options},
+      executables = executables)
