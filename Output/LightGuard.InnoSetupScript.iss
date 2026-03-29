@@ -13,7 +13,7 @@
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
-AppId={{8A386A70-D69F-471A-B322-280B9F986AAC}
+AppId={{8A386A70-D69F-471A-B322-280B9F986AAC}}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 ;AppVerName={#MyAppName} {#MyAppVersion}
@@ -22,7 +22,7 @@ AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
 DefaultDirName={localappdata}\{#MyAppName}
-UninstallDisplayIcon={app}\{#MyAppExeName}
+UninstallDisplayIcon={app}\lightguard_logo.ico
 ; "ArchitecturesAllowed=x64compatible" specifies that Setup cannot run
 ; on anything but x64 and Windows 11 on Arm.
 ArchitecturesAllowed=x64compatible
@@ -33,14 +33,14 @@ ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64compatible
 ChangesAssociations=yes
 DisableProgramGroupPage=yes
-LicenseFile=D:\Repo\Python\LightGuard\MIT License.txt
+LicenseFile={src}\MIT License.txt
 InfoBeforeFile=D:\Repo\Python\LightGuard\LightGuard Pre-Installation Informa.txt
 InfoAfterFile=D:\Repo\Python\LightGuard\LightGuard Post-Installation Informa.txt
 ; Uncomment the following line to run in non administrative install mode (install for current user only).
-;PrivilegesRequired=lowest
+PrivilegesRequired=lowest
 OutputDir=D:\Repo\Python\LightGuard\Output
 OutputBaseFilename=LightGuard.1.0
-SetupIconFile=D:\Repo\Python\LightGuard\lightguard_logo.ico
+SetupIconFile={src}\lightguard_logo.ico
 SolidCompression=yes
 WizardStyle=modern
 
@@ -51,40 +51,13 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 Name: "AutoStart"; Description: "Start LightGuard automatically with Windows"; GroupDescription: "Startup options"
 
-[Code]
-procedure CreateTaskXML();
-var
-  XMLPath, InstallDir: string;
-  XMLFile: TFileStream;
-  XMLContent: AnsiString;
-begin
-  InstallDir := ExpandConstant('{userappdata}\LightGuard');
-  XMLPath := InstallDir + '\LightGuardWakeUp.xml';
-
-  if not DirExists(InstallDir) then CreateDir(InstallDir);
-  
-  XMLFile := TFileStream.Create(XMLPath, fmCreate);
-  try
-    XMLContent := '<?xml version="1.0" encoding="UTF-16"?>' +
-                  '<Task version="1.4" xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task">' +
-                  '  <RegistrationInfo>' +
-                  '    <Date>' + GetDateTimeString('yyyy-mm-dd', '-', ':') + '</Date>' +
-                  '    <Author>' + ExpandConstant('{username}') + '</Author>' +
-                  '    <Description>When system wakes up, LightGuard runs.</Description>' +
-                  '    <URI>\LightGuard\LightGuardWakeUp</URI>' +
-                  '  </RegistrationInfo>' +
-                  '</Task>';
-
-    XMLFile.WriteBuffer(XMLContent[1], Length(XMLContent));
-  finally
-    XMLFile.Free;
-  end;
-end;
-
 
 [Files]
-Source: "D:\Repo\Python\LightGuard\dist\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\Repo\Python\LightGuard\LightGuardWake.bat"; DestDir: "{userappdata}\LightGuard"; Flags: ignoreversion
+Source: "{src}\dist\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{src}\settings.json"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{src}\lightguard_logo.ico"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{src}\dist\README.txt"; DestDir: "{app}"; Flags: ignoreversion
+; LightGuardWake.bat removed (scheduled task not required in new version)
 
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
@@ -95,12 +68,14 @@ Root: HKA; Subkey: "Software\Classes\{#MyAppAssocKey}\DefaultIcon"; ValueType: s
 Root: HKA; Subkey: "Software\Classes\{#MyAppAssocKey}\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""%1"""
 
 [Icons]
-Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
-Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
+Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; WorkingDir: "{app}"
+Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon; WorkingDir: "{app}"
 Name: "{userstartup}\LightGuard"; Filename: "{app}\LightGuard.exe"; WorkingDir: "{app}"
 Name: "{userstartup}\LightGuard"; Filename: "{app}\LightGuard.exe"; WorkingDir: "{app}"; Tasks: AutoStart
 
 [Run]
-Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
-Filename: "powershell.exe"; Parameters: "-Command Get-ScheduledTask -TaskName 'LightGuardWakeUp'"; Flags: runhidden
+Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent; WorkingDir: "{app}"
+; Scheduled-task check removed (not required)
+; Offer to open the packaged README after install (uses ShellExecute)
+Filename: "{app}\README.txt"; Description: "View README"; Flags: postinstall shellexec nowait skipifsilent
 

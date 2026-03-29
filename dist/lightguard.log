@@ -1,0 +1,6 @@
+2026-03-28 18:00:00,625 INFO schedule_apply_after_delay: enqueued GUI countdown 10s
+2026-03-28 18:00:11,273 INFO schedule_apply_after_delay: apply result=True
+2026-03-28 21:01:55,876 INFO System resume detected (time jump). Re-applying settings and updating schedule.
+2026-03-28 21:01:55,877 INFO Mode on resume: was 'auto', set to 'auto'
+2026-03-28 21:01:55,946 INFO schedule_apply_after_delay: enqueued GUI countdown 10s
+2026-03-28 21:02:11,901 INFO schedule_apply_after_delay: apply result=True

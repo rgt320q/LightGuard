@@ -1,0 +1,10 @@
+{
+    "day_brightness": "70",
+    "night_brightness": "25",
+    "day_contrast": "80",
+    "night_contrast": "35",
+    "day_start": "08:00",
+    "day_end": "18:00",
+    "lang": "tr",
+    "settings_geometry": "471x519+2045+738"
+}

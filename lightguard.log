@@ -1,0 +1,100 @@
+2026-03-27 23:44:50,482 INFO System resume detected (time jump). Re-applying settings and updating schedule.
+2026-03-27 23:44:50,488 INFO Mode on resume: was 'auto', set to 'auto'
+2026-03-27 23:44:50,496 INFO Resume apply attempt 1/5
+2026-03-27 23:44:50,497 INFO Resume: waiting up to 2s for monitors to be ready
+2026-03-27 23:44:52,953 INFO Resume: monitors_ready=False
+2026-03-27 23:44:52,954 INFO Resume: monitors not ready yet, will retry
+2026-03-27 23:44:52,954 INFO Resume: sleeping 1.0s before next attempt
+2026-03-27 23:44:53,954 INFO Resume apply attempt 2/5
+2026-03-27 23:44:53,954 INFO Resume: waiting up to 3s for monitors to be ready
+2026-03-27 23:44:54,495 INFO Resume: monitors_ready=True
+2026-03-27 23:44:54,962 INFO Resume apply succeeded
+2026-03-27 23:46:41,869 INFO System resume detected (time jump). Re-applying settings and updating schedule.
+2026-03-27 23:46:41,870 INFO Mode on resume: was 'auto', set to 'auto'
+2026-03-27 23:46:41,872 INFO Resume apply attempt 1/5
+2026-03-27 23:46:41,873 INFO Resume: waiting up to 2s for monitors to be ready
+2026-03-27 23:46:42,612 INFO Resume: monitors_ready=True
+2026-03-27 23:46:43,085 INFO Resume apply succeeded
+2026-03-27 23:53:58,396 INFO System resume detected (time jump). Re-applying settings and updating schedule.
+2026-03-27 23:53:58,400 INFO Mode on resume: was 'auto', set to 'auto'
+2026-03-27 23:53:58,401 INFO Resume apply attempt 1/5
+2026-03-27 23:53:58,401 INFO Resume: waiting up to 2s for monitors to be ready
+2026-03-27 23:53:58,869 INFO Resume: monitors_ready=True
+2026-03-27 23:53:59,380 INFO Resume apply succeeded
+2026-03-28 03:13:37,016 INFO System resume detected (time jump). Re-applying settings and updating schedule.
+2026-03-28 03:13:37,089 INFO Mode on resume: was 'auto', set to 'auto'
+2026-03-28 03:13:37,135 INFO Resume apply attempt 1/5
+2026-03-28 03:13:37,137 INFO Resume: waiting up to 2s for monitors to be ready
+2026-03-28 03:13:40,106 INFO Resume: monitors_ready=False
+2026-03-28 03:13:40,107 INFO Resume: monitors not ready yet, will retry
+2026-03-28 03:13:40,107 INFO Resume: sleeping 1.0s before next attempt
+2026-03-28 03:13:41,108 INFO Resume apply attempt 2/5
+2026-03-28 03:13:41,108 INFO Resume: waiting up to 3s for monitors to be ready
+2026-03-28 03:13:42,694 INFO Resume: monitors_ready=True
+2026-03-28 03:13:43,177 INFO Resume apply succeeded
+2026-03-28 10:43:09,533 INFO System resume detected (time jump). Re-applying settings and updating schedule.
+2026-03-28 10:43:09,555 INFO Mode on resume: was 'auto', set to 'auto'
+2026-03-28 10:43:09,623 INFO Resume apply attempt 1/5
+2026-03-28 10:43:09,684 INFO Resume: waiting up to 2s for monitors to be ready
+2026-03-28 10:43:12,361 INFO Resume: monitors_ready=False
+2026-03-28 10:43:12,361 INFO Resume: monitors not ready yet, will retry
+2026-03-28 10:43:12,361 INFO Resume: sleeping 1.0s before next attempt
+2026-03-28 10:43:13,362 INFO Resume apply attempt 2/5
+2026-03-28 10:43:13,362 INFO Resume: waiting up to 3s for monitors to be ready
+2026-03-28 10:43:14,620 INFO Resume: monitors_ready=True
+2026-03-28 10:43:15,054 INFO Resume apply succeeded
+2026-03-28 14:14:23,721 INFO System resume detected (time jump). Re-applying settings and updating schedule.
+2026-03-28 14:14:23,749 INFO Mode on resume: was 'auto', set to 'auto'
+2026-03-28 14:14:23,792 INFO Resume apply attempt 1/5
+2026-03-28 14:14:23,804 INFO Resume: waiting up to 2s for monitors to be ready
+2026-03-28 14:14:27,013 INFO Resume: monitors_ready=False
+2026-03-28 14:14:27,014 INFO Resume: monitors not ready yet, will retry
+2026-03-28 14:14:27,014 INFO Resume: sleeping 1.0s before next attempt
+2026-03-28 14:14:28,014 INFO Resume apply attempt 2/5
+2026-03-28 14:14:28,015 INFO Resume: waiting up to 3s for monitors to be ready
+2026-03-28 14:14:28,371 INFO Resume: monitors_ready=True
+2026-03-28 14:14:28,881 INFO Resume apply succeeded
+2026-03-28 14:27:44,108 INFO schedule_apply_after_delay: scheduled background timer 2s
+2026-03-28 14:27:46,559 INFO schedule_apply_after_delay: apply result=True
+2026-03-28 14:36:15,835 INFO schedule_apply_after_delay: started countdown and background apply in 5s
+2026-03-28 14:36:21,305 INFO schedule_apply_after_delay: apply result=True
+2026-03-28 14:37:11,498 INFO System resume detected (time jump). Re-applying settings and updating schedule.
+2026-03-28 14:37:11,499 INFO Mode on resume: was 'auto', set to 'auto'
+2026-03-28 14:37:11,501 INFO schedule_apply_after_delay: scheduled via gui_root.after 30s
+2026-03-28 14:37:41,954 INFO schedule_apply_after_delay: apply result=True
+2026-03-28 14:40:36,408 INFO schedule_apply_after_delay: started countdown and background apply in 3s
+2026-03-28 14:40:39,833 INFO schedule_apply_after_delay: apply result=True
+2026-03-28 14:46:20,633 INFO schedule_apply_after_delay: started countdown and background apply in 3s
+2026-03-28 14:46:24,081 INFO schedule_apply_after_delay: apply result=True
+2026-03-28 14:51:11,589 INFO schedule_apply_after_delay: enqueued GUI countdown 3s
+2026-03-28 14:51:16,086 INFO schedule_apply_after_delay: apply result=True
+2026-03-28 14:51:51,927 INFO System resume detected (time jump). Re-applying settings and updating schedule.
+2026-03-28 14:51:51,932 INFO Mode on resume: was 'auto', set to 'auto'
+2026-03-28 14:51:51,933 INFO schedule_apply_after_delay: enqueued GUI countdown 20s
+2026-03-28 14:52:12,612 INFO schedule_apply_after_delay: apply result=True
+2026-03-28 14:54:38,841 INFO schedule_apply_after_delay: enqueued GUI countdown 3s
+2026-03-28 14:54:43,367 INFO schedule_apply_after_delay: apply result=True
+2026-03-28 15:31:07,998 INFO System resume detected (time jump). Re-applying settings and updating schedule.
+2026-03-28 15:31:08,003 INFO Mode on resume: was 'auto', set to 'auto'
+2026-03-28 15:31:08,004 INFO schedule_apply_after_delay: enqueued GUI countdown 10s
+2026-03-28 15:31:19,114 INFO schedule_apply_after_delay: apply result=True
+2026-03-28 15:34:35,944 INFO System resume detected (time jump). Re-applying settings and updating schedule.
+2026-03-28 15:34:35,944 INFO Mode on resume: was 'auto', set to 'auto'
+2026-03-28 15:34:35,945 INFO schedule_apply_after_delay: enqueued GUI countdown 10s
+2026-03-28 15:34:46,956 INFO schedule_apply_after_delay: apply result=True
+2026-03-28 15:37:17,121 INFO schedule_apply_after_delay: enqueued GUI countdown 5s
+2026-03-28 15:37:23,186 INFO schedule_apply_after_delay: apply result=True
+2026-03-28 15:40:02,490 INFO schedule_apply_after_delay: enqueued GUI countdown 7s
+2026-03-28 15:40:10,225 INFO schedule_apply_after_delay: apply result=True
+2026-03-28 15:40:53,797 INFO schedule_apply_after_delay: enqueued GUI countdown 7s
+2026-03-28 15:41:01,505 INFO schedule_apply_after_delay: apply result=True
+2026-03-28 15:42:00,419 INFO schedule_apply_after_delay: enqueued GUI countdown 7s
+2026-03-28 15:42:08,133 INFO schedule_apply_after_delay: apply result=True
+2026-03-28 15:42:35,072 INFO System resume detected (time jump). Re-applying settings and updating schedule.
+2026-03-28 15:42:35,073 INFO Mode on resume: was 'auto', set to 'auto'
+2026-03-28 15:42:35,075 INFO schedule_apply_after_delay: enqueued GUI countdown 10s
+2026-03-28 15:42:46,741 INFO schedule_apply_after_delay: apply result=True
+2026-03-28 15:45:36,690 INFO schedule_apply_after_delay: enqueued GUI countdown 7s
+2026-03-28 15:45:44,374 INFO schedule_apply_after_delay: apply result=True
+2026-03-28 15:48:00,323 INFO schedule_apply_after_delay: enqueued GUI countdown 10s
+2026-03-28 15:48:10,909 INFO schedule_apply_after_delay: apply result=True
