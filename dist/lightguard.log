@@ -4,3 +4,15 @@
 2026-03-28 21:01:55,877 INFO Mode on resume: was 'auto', set to 'auto'
 2026-03-28 21:01:55,946 INFO schedule_apply_after_delay: enqueued GUI countdown 10s
 2026-03-28 21:02:11,901 INFO schedule_apply_after_delay: apply result=True
+2026-03-29 03:14:01,939 INFO System resume detected (time jump). Re-applying settings and updating schedule.
+2026-03-29 03:14:02,022 INFO Mode on resume: was 'night', set to 'auto'
+2026-03-29 03:14:02,026 INFO schedule_apply_after_delay: enqueued GUI countdown 10s
+2026-03-29 03:14:18,087 INFO schedule_apply_after_delay: apply result=True
+2026-03-29 10:54:45,663 INFO System resume detected (time jump). Re-applying settings and updating schedule.
+2026-03-29 10:54:45,663 INFO Mode on resume: was 'auto', set to 'auto'
+2026-03-29 10:54:45,726 INFO schedule_apply_after_delay: enqueued GUI countdown 10s
+2026-03-29 10:54:59,002 INFO schedule_apply_after_delay: apply result=True
+2026-03-29 15:38:43,201 INFO System resume detected (time jump). Re-applying settings and updating schedule.
+2026-03-29 15:38:43,202 INFO Mode on resume: was 'auto', set to 'auto'
+2026-03-29 15:38:43,203 INFO schedule_apply_after_delay: enqueued GUI countdown 10s
+2026-03-29 15:38:59,566 INFO schedule_apply_after_delay: apply result=True
